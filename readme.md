@@ -72,6 +72,11 @@ git checkout origin/1.0.1beta-upgrade
 make install
 mv $HOME/go/bin/seid /usr/bin/
 ```
+**soft ulimit set more high
+```
+echo "* soft nofile 50000" >>/etc/security/limits.conf
+```
+
 **Generate keys**
 
 * `seid keys add [key_name]`
@@ -103,6 +108,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/root/
+ExecStart=
 ExecStart=/root/go/bin/seid start
 Restart=on-failure
 StartLimitInterval=0
@@ -114,6 +120,7 @@ LimitMEMLOCK=209715200
 WantedBy=multi-user.target
 ```
 ## Start the node
+* Set soft unode: `ulimit -n 500000`
 * Reload the service files: `sudo systemctl daemon-reload` 
 * Create the symlinlk: `sudo systemctl enable seid.service` 
 * Start the node sudo: `systemctl start seid && journalctl -u seid -f`
